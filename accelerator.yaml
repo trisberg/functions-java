@@ -1,0 +1,57 @@
+accelerator:
+  displayName: Functions Java
+  description: Spring Boot based function to be built with Function Buildpacks for Knative
+  iconUrl: https://raw.githubusercontent.com/bbtong/functions-accelerator-java/main/functions-icon.png
+  tags:
+  - java
+  - spring
+  - cloud
+  - function
+  - serverless
+  - knative
+
+  # options for the UI
+  options:
+  - name: functionName
+    inputType: text
+    label: The name of the function
+    defaultValue: hello
+    required: true
+  - name: buildType
+    inputType: select
+    choices:
+    - value: maven
+      text: Maven
+    - value: gradle
+      text: Gradle
+    defaultValue: maven
+    required: true
+
+engine:
+  merge:
+    - include: [ "src/**", "LICENSE", ".gitignore" ]
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "hello()"
+          with: "#functionName + '()'"
+    - include: [ "pom.xml", ".mvn/**", "mvnw", "mvnw.bat" ]
+      condition: "#buildType == 'maven'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: functions-java
+          with: "#functionName"
+    - include: [ "build.gradle", "settings.gradle", "gradle/**", "gradlew", "gradlew.bat" ]
+      condition: "#buildType == 'gradle'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: functions-java
+          with: "#functionName"
+    - include: [ "README.md"]
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: functions-java
+          with: "#functionName"
