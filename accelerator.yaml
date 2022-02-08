@@ -38,14 +38,17 @@ accelerator:
 
 engine:
   merge:
-    - include: [ "src/**", "func.yaml", "LICENSE", ".gitignore" ]
+    - include: [ "func.yaml", "LICENSE", ".gitignore" ]
+    - include: [ "src/**" ]
       chain:
       - type: ReplaceText
         substitutions:
         - text: "hello()"
           with: "#functionName + '()'"
-    - include: [ "pom.xml", ".mvn/**", "mvnw", "mvnw.bat" ]
+    - include: [ ".mvn/**", "mvnw", "mvnw.bat" ]
       condition: "#buildType == 'maven'"
+    - include: [ "pom.xml" ]
+      condition: "#buildType == 'maven' && #interfaceType == 'http'"
       chain:
       - type: ReplaceText
         substitutions:
@@ -60,13 +63,17 @@ engine:
           with: "#functionName"
       - type: RewritePath
         rewriteTo: "#filename"
-    - include: [ "build.gradle", "settings.gradle", "gradle/**", "gradlew", "gradlew.bat" ]
+    - include: [ "gradle/**", "gradlew", "gradlew.bat" ]
+      condition: "#buildType == 'gradle'"
+    - include: [ "settings.gradle" ]
       condition: "#buildType == 'gradle'"
       chain:
       - type: ReplaceText
         substitutions:
         - text: functions-java
           with: "#functionName"
+    - include: [ "build.gradle" ]
+      condition: "#buildType == 'gradle' && #interfaceType == 'http'"
     - include: [ "cloudevents/build.gradle" ]
       condition: "#buildType == 'gradle' && #interfaceType == 'cloudevents'"
       chain:
