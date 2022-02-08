@@ -38,7 +38,7 @@ accelerator:
 
 engine:
   merge:
-    - include: [ "src/**", "LICENSE", ".gitignore" ]
+    - include: [ "src/**", "func.yaml", "LICENSE", ".gitignore" ]
       chain:
       - type: ReplaceText
         substitutions:
