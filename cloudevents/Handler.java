@@ -1,4 +1,4 @@
-package com.vmware.functions;
+package functions;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
