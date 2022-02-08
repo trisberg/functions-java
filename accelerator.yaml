@@ -51,6 +51,15 @@ engine:
         substitutions:
         - text: functions-java
           with: "#functionName"
+    - include: [ "cloudevents/pom.xml" ]
+      condition: "#buildType == 'maven' && #interfaceType == 'cloudevents'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: functions-java
+          with: "#functionName"
+      - type: RewritePath
+        rewriteTo: "#filename"
     - include: [ "build.gradle", "settings.gradle", "gradle/**", "gradlew", "gradlew.bat" ]
       condition: "#buildType == 'gradle'"
       chain:
@@ -58,6 +67,20 @@ engine:
         substitutions:
         - text: functions-java
           with: "#functionName"
+    - include: [ "cloudevents/build.gradle" ]
+      condition: "#buildType == 'gradle' && #interfaceType == 'cloudevents'"
+      chain:
+      - type: RewritePath
+        rewriteTo: "#filename"
+    - include: [ "cloudevents/Handler.java" ]
+      condition: "#interfaceType == 'cloudevents'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "hello()"
+          with: "#functionName + '()'"
+      - type: RewritePath
+        rewriteTo: "'src/main/java/functions/Handler.java'"
     - include: [ "README.md"]
       chain:
       - type: ReplaceText
