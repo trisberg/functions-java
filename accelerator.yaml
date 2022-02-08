@@ -26,6 +26,15 @@ accelerator:
       text: Gradle
     defaultValue: maven
     required: true
+  - name: interfaceType
+    inputType: select
+    choices:
+    - value: http
+      text: HTTP Function
+    - value: cloudevents
+      text: CloudEvents Function (Experimental)
+    defaultValue: http
+    required: true
 
 engine:
   merge:
